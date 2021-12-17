@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://www.amorozov.com/spring/ws/payments"
+        targetNamespace="http://www.amorozov.com/spring/ws/payments" elementFormDefault="qualified">
+
+    <xs:element name="setPaymentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="payment_id" type="xs:long"/>
+                <xs:element name="paymentAmount" type="xs:decimal"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="setPaymentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="payment" type="tns:payment"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPaymentByPaymentIdRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="payment_id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPaymentByPaymentIdResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="payment" type="tns:payment"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="payment">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="payment_id" type="xs:long"/>
+            <xs:element name="paymentAmount" type="xs:decimal"/>
+            <xs:element name="date_of_payment" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

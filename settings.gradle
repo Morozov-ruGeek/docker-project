@@ -1,0 +1,3 @@
+rootProject.name = 'docker-project'
+include 'study-center'
+include 'payment-service'

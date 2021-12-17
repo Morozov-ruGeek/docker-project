@@ -1,0 +1,16 @@
+server:
+  port: 8189
+spring:
+  sql:
+    init:
+      schema-locations: classpath:sql/schema.sql
+#      data-locations: classpath:sql/data.sql
+      mode: always
+  datasource:
+    driver-class-name: org.h2.Driver
+    jdbc-url: jdbc:h2:mem:mydb;
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
