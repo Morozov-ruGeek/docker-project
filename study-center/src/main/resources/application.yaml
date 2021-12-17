@@ -3,19 +3,19 @@ server:
     context-path: /study_center
   port: 8190
 spring:
-  sql:
-    init:
-      schema-locations: classpath:sql/schema.sql
-      data-locations: classpath:sql/data.sql
-      mode: always
+#  sql:
+#    init:
+#      schema-locations: classpath:sql/schema.sql
+#      data-locations: classpath:sql/data.sql
+#      mode: always
   datasource:
-    driverClassName: org.h2.Driver
-    jdbc-url: jdbc:h2:mem:mydb;
-    username: root
-    password: root
-  h2:
-    console:
-      enabled: true
+    driverClassName: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://localhost:5555/my-db
+      username: postgres
+      password: postgres
+#  h2:
+#    console:
+#      enabled: true
 jwt:
   secret: SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
   lifetime: 1200000

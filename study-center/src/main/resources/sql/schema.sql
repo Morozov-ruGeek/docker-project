@@ -1,7 +1,7 @@
 drop table if exists users;
 create table users
 (
-    id       identity primary key,
+    id       serial primary key,
     username varchar(30) not null unique,
     password varchar(80) not null
 );
@@ -9,7 +9,7 @@ create table users
 drop table if exists roles;
 create table roles
 (
-    id   identity primary key,
+    id   serial primary key,
     name varchar(50) not null unique
 );
 
@@ -24,7 +24,7 @@ create table users_roles
 drop table if exists students;
 create table students
 (
-    id         identity primary key,
+    id         serial primary key,
     first_name varchar(128) not null,
     last_name  varchar(128) not null,
     start_date date
@@ -33,15 +33,15 @@ create table students
 drop table if exists courses;
 create table courses
 (
-    id     identity primary key,
+    id     serial primary key,
     name   varchar(128) not null unique,
-    amount decimal default zero()
+    amount decimal default 0.0
 );
 
 drop table if exists topics;
 create table topics
 (
-    id              identity primary key,
+    id              serial primary key,
     name            varchar(128) not null unique,
     hours_durations int          not null
 );
@@ -49,9 +49,9 @@ create table topics
 drop table if exists scores;
 create table scores
 (
-    id         identity not null primary key,
+    id         serial not null primary key,
     topic_id   int references topics (id),
-    student_id long references students (id) on delete cascade,
+    student_id bigint references students (id) on delete cascade,
     score      int
 );
 
@@ -73,7 +73,7 @@ create table course_topics
 drop table if exists payments;
 create table payments
 (
-    id         identity primary key,
+    id         serial primary key,
     student_id bigint not null references students (id),
     course_id  bigint not null references courses (id),
     is_paid    boolean default false
