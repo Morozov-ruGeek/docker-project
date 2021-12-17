@@ -30,7 +30,7 @@ docker {
     name "${project.name}:${project.version}"
     dockerfile file('src/docker/Dockerfile')
     files 'study-center.jar'
-    buildArgs(['JAR_FILE': 'study-center.jar'])
+    buildArgs(['JAR_FILE': "study-center.jar"])
     tag 'DockerHub', "rumoroz/gradle-study-center:${project.version}"
 }
 

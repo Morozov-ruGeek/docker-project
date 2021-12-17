@@ -31,7 +31,7 @@ docker {
     name "${project.name}:${project.version}"
     dockerfile file('src/docker/Dockerfile')
     files 'payment-service.jar'
-    buildArgs(['JAR_FILE': 'payment-service.jar'])
+    buildArgs(['JAR_FILE': "payment-service.jar"])
     tag 'DockerHub', "rumoroz/gradle-payment-service:${project.version}"
 }
 
