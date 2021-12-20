@@ -1,16 +1,8 @@
 server:
   port: 8189
 spring:
-#  sql:
-#    init:
-#      schema-locations: classpath:sql/schema.sql
-##      data-locations: classpath:sql/data.sql
-#      mode: always
   datasource:
     driverClassName: org.postgresql.Driver
-      jdbc-url: jdbc:postgresql://localhost:5532/payment-db
-      username: postgres
-      password: postgres
-#  h2:
-#    console:
-#      enabled: true
+    url: jdbc:postgresql://localhost:5532/payment-db
+    username: postgres
+    password: postgres
