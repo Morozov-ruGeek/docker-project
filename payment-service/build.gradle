@@ -28,15 +28,15 @@ bootJar{
 }
 
 docker {
-    name "${project.name}:${project.version}"
+    name "payment-service:${project.version}"
     copySpec.from(jar).rename(".*","payment-service.jar")
     buildArgs(['JAR_FILE': "payment-service.jar"])
     tag 'DockerHub', "rumoroz/gradle-payment-service:${project.version}"
 }
 
 dockerRun {
-    name "${project.name}"
-    image "${project.name}:${project.version}"
+    name "study-center"
+    image "study-center:${project.version}"
     clean true
 }
 
@@ -87,4 +87,4 @@ task jaxb {
     }
 }
 
-jaxb.enabled = false
+//jaxb.enabled = false

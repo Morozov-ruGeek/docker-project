@@ -27,15 +27,15 @@ bootJar{
 }
 
 docker {
-    name "${project.name}:${project.version}"
+    name "study-center:${project.version}"
     copySpec.from(jar).rename(".*","study-center.jar")
-    buildArgs(['JAR_FILE': "study-center.jar"])
+    buildArgs(['Jar_file': "study-center.jar"])
     tag 'DockerHub', "rumoroz/gradle-study-center:${project.version}"
 }
 
 dockerRun {
-    name "${project.name}"
-    image "${project.name}:${project.version}"
+    name "study-center"
+    image "study-center:${project.version}"
     ports '8190:8190'
     clean true
 }
@@ -76,7 +76,7 @@ task genJaxb {
         }
     }
 }
-genJaxb.enabled = false
+//genJaxb.enabled = false
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
