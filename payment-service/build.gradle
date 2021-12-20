@@ -29,8 +29,7 @@ bootJar{
 
 docker {
     name "${project.name}:${project.version}"
-    dockerfile file('src/docker/Dockerfile')
-    files 'payment-service.jar'
+    copySpec.from(jar).rename(".*","payment-service.jar")
     buildArgs(['JAR_FILE': "payment-service.jar"])
     tag 'DockerHub', "rumoroz/gradle-payment-service:${project.version}"
 }
@@ -38,7 +37,6 @@ docker {
 dockerRun {
     name "${project.name}"
     image "${project.name}:${project.version}"
-    ports '8189:8189'
     clean true
 }
 

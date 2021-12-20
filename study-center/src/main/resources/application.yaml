@@ -10,7 +10,7 @@ spring:
 #      mode: always
   datasource:
     driverClassName: org.postgresql.Driver
-      jdbc-url: jdbc:postgresql://localhost:5432/my-db
+      jdbc-url: jdbc:postgresql://localhost:5432/study-db
       username: postgres
       password: postgres
 #  h2:
