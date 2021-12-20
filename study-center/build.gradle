@@ -23,6 +23,7 @@ repositories {
 
 def fileName = 'study-center'
 bootJar{
+    mainClass = 'com.epam.amorozov.studycenter.StudyCenterApplication'
     archiveName "${fileName}.jar"
 }
 

@@ -24,6 +24,7 @@ repositories {
 
 def fileName = 'payment-service'
 bootJar{
+    mainClass = 'com.epam.amorozov.paymentservice.PaymentServiceApplication'
     archiveName "${fileName}.jar"
 }
 

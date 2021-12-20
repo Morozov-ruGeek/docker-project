@@ -5,7 +5,9 @@ services:
   payment-service:
     build: payment-service/
     container_name: payment-service
-    links:
+    expose:
+      - "8189"
+    depends_on:
       - payment-db
 
   study-center:
@@ -13,7 +15,7 @@ services:
     container_name: study_center
     ports:
       - "8190:8190"
-    links:
+    depends_on:
       - study-db
       - payment-service
 
