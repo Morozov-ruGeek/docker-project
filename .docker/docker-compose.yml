@@ -3,6 +3,7 @@ version: "3.9"
 services:
   payment-service:
     build: payment-service/
+    container_name: payment-service
     links:
       - payment-db
 
@@ -20,6 +21,7 @@ services:
 
   study-center:
     build: study-center/
+    container_name: study_center
     ports:
       - "8190:8190"
     links:
