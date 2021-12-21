@@ -30,13 +30,13 @@ bootJar{
 docker {
     name "study-center:${project.version}"
     copySpec.from(jar).rename(".*","study-center.jar")
-    buildArgs(['Jar_file': "study-center.jar"])
+    files 'study-center.jar'
     tag 'DockerHub', "rumoroz/gradle-study-center:${project.version}"
 }
 
 dockerRun {
-    name "study-center"
-    image "study-center:${project.version}"
+    name "${project.name}"
+    image "${project.name}:${project.version}"
     ports '8190:8190'
     clean true
 }

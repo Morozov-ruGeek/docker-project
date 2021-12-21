@@ -1,4 +1,5 @@
 FROM openjdk:11.0.12-jre-buster
 VOLUME /tmp
-COPY build/libs/payment-service.jar payment-service.jar
-ENTRYPOINT ["java","-jar","payment-service.jar"]
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} payment-service.jar
+ENTRYPOINT ["java","-jar","*/payment-service.jar"]
