@@ -5,9 +5,10 @@ server:
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/study-db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${POSTGRES_URL}
+    jdbc-url: jdbc:postgresql://${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
 jwt:
   secret: SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
   lifetime: 1200000
