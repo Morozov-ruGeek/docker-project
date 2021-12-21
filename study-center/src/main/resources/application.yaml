@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /study_center
+    context-path: /study-center
   port: 8190
 spring:
   datasource:
@@ -12,3 +12,5 @@ spring:
 jwt:
   secret: SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
   lifetime: 1200000
+
+soap-url: ${SOAP_URL}

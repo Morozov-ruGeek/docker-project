@@ -15,7 +15,7 @@ services:
       - POSTGRES_DB=payment-db
       - POSTGRES_URL=payment-db:5432/payment-db
     tty: true
-
+#todo check SOAP_URL
   study-center:
     build: study-center/
     container_name: study_center
@@ -29,6 +29,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=study-db
       - POSTGRES_URL=study-db:5432/study-db
+      - SOAP_URL=http://payment-service:8189/ws
     tty: true
 
   payment-db:

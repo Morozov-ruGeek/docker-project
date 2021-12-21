@@ -1,12 +1,16 @@
 package com.epam.amorozov.studycenter.configs;
 
 import com.epam.amorozov.studycenter.soap.client.PaymentClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 @Configuration
 public class PaymentClientConfig {
+
+    @Value("${soap-url}")
+    String url;
 
     @Bean
     public Jaxb2Marshaller marshaller() {
@@ -18,7 +22,7 @@ public class PaymentClientConfig {
     @Bean
     public PaymentClient paymentClient(Jaxb2Marshaller marshaller) {
         PaymentClient paymentClient = new PaymentClient();
-        paymentClient.setDefaultUri("http://localhost:8189/ws");
+        paymentClient.setDefaultUri(url);
         paymentClient.setMarshaller(marshaller);
         paymentClient.setUnmarshaller(marshaller);
         return paymentClient;
