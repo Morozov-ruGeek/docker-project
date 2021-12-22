@@ -22,12 +22,6 @@ repositories {
     mavenCentral()
 }
 
-def fileName = 'payment-service'
-bootJar{
-    mainClass = 'com.epam.amorozov.paymentservice.PaymentServiceApplication'
-    archiveName "${fileName}.jar"
-}
-
 docker {
     name "payment-service:${project.version}"
     copySpec.from(jar).rename(".*","payment-service.jar")
@@ -67,6 +61,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+def fileName = 'payment-service'
+bootJar{
+    mainClass = 'com.epam.amorozov.paymentservice.PaymentServiceApplication'
+    archiveName "${fileName}.jar"
 }
 
 task jaxb {

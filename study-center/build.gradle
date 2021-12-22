@@ -21,12 +21,6 @@ repositories {
     mavenCentral()
 }
 
-def fileName = 'study-center'
-bootJar{
-    mainClass = 'com.epam.amorozov.studycenter.StudyCenterApplication'
-    archiveName "${fileName}.jar"
-}
-
 docker {
     name "study-center:${project.version}"
     copySpec.from(jar).rename(".*","study-center.jar")
@@ -77,7 +71,7 @@ task genJaxb {
         }
     }
 }
-//genJaxb.enabled = false
+genJaxb.enabled = false
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
@@ -117,7 +111,8 @@ test {
     useJUnitPlatform()
 }
 
-bootJar {
-    baseName = 'gs-consuming-web-service'
-    version =  '0.0.1'
+def fileName = 'study-center'
+bootJar{
+    mainClass = 'com.epam.amorozov.studycenter.StudyCenterApplication'
+    archiveName "${fileName}.jar"
 }
