@@ -2,6 +2,12 @@ version: '3.9'
 
 services:
 
+  spring-cloud-config:
+    build: spring-cloud-config-server/
+    container_name: spring-cloud-config
+    expose:
+      - "8888"
+
   payment-service:
     build: payment-service/
     container_name: payment-service
@@ -9,12 +15,15 @@ services:
       - "8189"
     depends_on:
       - payment-db
+      - spring-cloud-config
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=payment-db
       - POSTGRES_URL=payment-db:5432/payment-db
+      - CONFIG_URL=http://spring-cloud-config:8888
     tty: true
+
 #todo check SOAP_URL
   study-center:
     build: study-center/
@@ -24,12 +33,14 @@ services:
     depends_on:
       - study-db
       - payment-service
+      - spring-cloud-config
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=study-db
       - POSTGRES_URL=study-db:5432/study-db
       - SOAP_URL=http://payment-service:8189/ws
+      - CONFIG_URL=http://spring-cloud-config:8888
     tty: true
 
   payment-db:

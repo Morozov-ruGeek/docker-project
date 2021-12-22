@@ -21,6 +21,10 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set('springCloudVersion', "2021.0.0")
+}
+
 docker {
     name "study-center:${project.version}"
     copySpec.from(jar).rename(".*","study-center.jar")
@@ -101,6 +105,8 @@ dependencies {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
     implementation 'org.springframework.ws:spring-ws-core'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
     implementation 'org.glassfish.jaxb:jaxb-runtime'
     implementation(files(genJaxb.classesDir).builtBy(genJaxb))
