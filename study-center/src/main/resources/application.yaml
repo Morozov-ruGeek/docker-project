@@ -9,6 +9,7 @@ spring:
     jdbc-url: jdbc:postgresql://${POSTGRES_URL}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+
 jwt:
   secret: SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
   lifetime: 1200000
