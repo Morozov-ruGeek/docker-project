@@ -2,5 +2,8 @@ server:
   port: 8189
 
 spring:
-  config:
-    import: ${CONFIG_URL}
+  cloud:
+    config:
+      uri: ${CONFIG_URL}
+      import-check:
+        enabled: false

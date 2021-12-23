@@ -14,8 +14,8 @@ services:
     expose:
       - "8189"
     depends_on:
-      - payment-db
       - spring-cloud-config
+      - payment-db
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
@@ -31,9 +31,9 @@ services:
     ports:
       - "8190:8190"
     depends_on:
+      - spring-cloud-config
       - study-db
       - payment-service
-      - spring-cloud-config
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres

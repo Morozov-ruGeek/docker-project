@@ -3,8 +3,11 @@ server:
 spring:
   application:
     name: study-center
-  config:
-    import: ${CONFIG_URL}
+  cloud:
+    config:
+      uri: ${CONFIG_URL}
+      import-check:
+        enabled: false
 
 jwt:
   secret: SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
