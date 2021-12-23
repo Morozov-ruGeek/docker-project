@@ -7,6 +7,6 @@ jwt:
 
 soap-url: ${SOAP_URL}
 
-spring:
-  config:
-    import: "optional:configserver:http://spring-cloud-config:8888"
+#spring:
+#  config:
+#    import: "optional:configserver:http://spring-cloud-config:8888"
