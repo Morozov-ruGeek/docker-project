@@ -1,16 +1,12 @@
 server:
   port: 8190
-spring:
-  application:
-    name: study-center
-  cloud:
-    config:
-      uri: ${CONFIG_URL}
-      import-check:
-        enabled: false
 
 jwt:
   secret: SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
   lifetime: 1200000
 
 soap-url: ${SOAP_URL}
+
+spring:
+  config:
+    import: "optional:configserver:http://spring-cloud-config:8888"

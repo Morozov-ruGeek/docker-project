@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    config:
+      uri: ${CONFIG_URL}
+      import-check:
+        enabled: false
+  application:
+    name: payment-service

@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: study-center
+  cloud:
+    config:
+      uri: ${CONFIG_URL}
