@@ -3,10 +3,11 @@ server:
 spring:
   application:
     name: spring-cloud-config
+  profiles:
+    active: git
   cloud:
     config:
       server:
         git:
           uri: https://github.com/Morozov-ruGeek/spring-cloud-config
-          force-pull: true
-        bootstrap: true
+#        bootstrap: true

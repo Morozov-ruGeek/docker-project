@@ -1,6 +1,0 @@
-spring:
-  cloud:
-    config:
-      uri: ${CONFIG_URL}
-  application:
-    name: payment-service
