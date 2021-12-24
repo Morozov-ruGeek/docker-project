@@ -2,11 +2,11 @@ package com.epam.amorozov.studycenter.repositories.jdbcimpl;
 
 import com.epam.amorozov.studycenter.models.entities.Topic;
 import com.epam.amorozov.studycenter.repositories.TopicRepository;
-import com.epam.amorozov.studycenter.utils.IdKeyHolder;
 import com.epam.amorozov.studycenter.utils.ResourceReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -22,13 +22,13 @@ public class JdbcTopicRepository implements TopicRepository {
     private static final String SAVE_TOPIC_SQL_QUERY_PATH = "classpath:queries/topic/save_topic.sql";
 
     private final JdbcTemplate jdbcTemplate;
-    private final IdKeyHolder idKeyHolder;
+    private final GeneratedKeyHolder keyHolder;
     private final ResourceReader resourceReader;
 
     @Autowired
-    public JdbcTopicRepository(JdbcTemplate jdbcTemplate, IdKeyHolder idKeyHolder, ResourceReader resourceReader) {
+    public JdbcTopicRepository(JdbcTemplate jdbcTemplate, GeneratedKeyHolder keyHolder, ResourceReader resourceReader) {
         this.jdbcTemplate = jdbcTemplate;
-        this.idKeyHolder = idKeyHolder;
+        this.keyHolder = keyHolder;
         this.resourceReader = resourceReader;
     }
 
@@ -38,12 +38,12 @@ public class JdbcTopicRepository implements TopicRepository {
         List<Long> ids = new ArrayList<>();
         topics.forEach(topic -> {
             jdbcTemplate.update(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement(saveTopicSql, new String[]{"ID"});
+                PreparedStatement preparedStatement = connection.prepareStatement(saveTopicSql, new String[]{"id"});
                 preparedStatement.setString(1, topic.getName());
                 preparedStatement.setInt(2, topic.getHoursDuration());
                 return preparedStatement;
-            }, idKeyHolder);
-            ids.add(Objects.requireNonNull(idKeyHolder.getKey()).longValue());
+            }, keyHolder);
+            ids.add(Objects.requireNonNull(keyHolder.getKey()).longValue());
         });
         return ids;
     }

@@ -2,7 +2,6 @@ package com.epam.amorozov.studycenter.repositories.jdbcimpl;
 
 import com.epam.amorozov.studycenter.models.entities.PaymentEntity;
 import com.epam.amorozov.studycenter.repositories.PaymentEntityRepository;
-import com.epam.amorozov.studycenter.utils.IdKeyHolder;
 import com.epam.amorozov.studycenter.utils.ResourceReader;
 import com.epam.amorozov.studycenter.utils.extractors.PaymentEntityExtractor;
 import com.epam.amorozov.studycenter.utils.extractors.PaymentRowMapper;
@@ -33,19 +32,19 @@ public class JdbcPaymentEntityRepository implements PaymentEntityRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final PaymentRowMapper paymentRowMapper;
-    private final IdKeyHolder idKeyHolder;
+    private final GeneratedKeyHolder keyHolder;
     private final ResourceReader resourceReader;
     private final PaymentEntityExtractor paymentEntityExtractor;
 
     @Autowired
     public JdbcPaymentEntityRepository(JdbcTemplate jdbcTemplate,
                                        PaymentRowMapper paymentRowMapper,
-                                       IdKeyHolder idKeyHolder,
+                                       GeneratedKeyHolder keyHolder,
                                        ResourceReader resourceReader,
                                        PaymentEntityExtractor paymentEntityExtractor) {
         this.jdbcTemplate = jdbcTemplate;
         this.paymentRowMapper = paymentRowMapper;
-        this.idKeyHolder = idKeyHolder;
+        this.keyHolder = keyHolder;
         this.resourceReader = resourceReader;
         this.paymentEntityExtractor = paymentEntityExtractor;
     }
@@ -56,7 +55,7 @@ public class JdbcPaymentEntityRepository implements PaymentEntityRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
             jdbcTemplate.update(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement(savePaymentSql, new String[]{"ID"});
+                PreparedStatement preparedStatement = connection.prepareStatement(savePaymentSql, new String[]{"id"});
                 preparedStatement.setLong(1, paymentEntity.getStudentId());
                 preparedStatement.setLong(2, paymentEntity.getCourseId());
                 return preparedStatement;

@@ -2,5 +2,7 @@ server:
   port: 8189
 
 spring:
+  application:
+    name: payment-service
   config:
     import: optional:configserver:http://spring-cloud-config:8888

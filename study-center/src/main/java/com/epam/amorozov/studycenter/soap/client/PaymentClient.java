@@ -1,8 +1,10 @@
 package com.epam.amorozov.studycenter.soap.client;
 
 import com.epam.amorozov.studycenter.exceptions.ResourceNotFoundException;
-import com.epam.amorozov.studycenter.wsdl.*;
+
+import com.epam.amorozov.studycenter.soap.model.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import org.springframework.ws.soap.client.SoapFaultClientException;
 
@@ -11,7 +13,12 @@ import java.math.BigDecimal;
 @Slf4j
 public class PaymentClient extends WebServiceGatewaySupport {
 
-    private static final ObjectFactory objectFactory = new ObjectFactory();
+    private ObjectFactory objectFactory;
+
+    @Autowired
+    public void setObjectFactory(ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory;
+    }
 
     public SetPaymentResponse setPayment(Long paymentId, BigDecimal paymentAmount) {
         SetPaymentRequest request = objectFactory.createSetPaymentRequest();

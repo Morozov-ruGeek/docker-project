@@ -1,13 +1,16 @@
 server:
   port: 8888
+
 spring:
   application:
     name: spring-cloud-config
-  profiles:
-    active: git
+#  profiles:
+#    active: git
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/Morozov-ruGeek/spring-cloud-config
+          uri: https://github.com/Morozov-ruGeek/spring-cloud-config.git
+#          uri: https://github.com/Morozov-ruGeek/test-config.git
+          skipSslValidation: true
 #        bootstrap: true

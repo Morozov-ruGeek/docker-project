@@ -31,14 +31,17 @@ public class JdbcPaymentRepository implements PaymentRepository {
     private final JdbcTemplate jdbcTemplate;
     private final PaymentRowMapper paymentRowMapper;
     private final ResourceReader resourceReader;
+    private final GeneratedKeyHolder keyHolder;
 
     @Autowired
     public JdbcPaymentRepository(JdbcTemplate jdbcTemplate,
                                  PaymentRowMapper paymentRowMapper,
-                                 ResourceReader resourceReader) {
+                                 ResourceReader resourceReader,
+                                 GeneratedKeyHolder keyHolder) {
         this.jdbcTemplate = jdbcTemplate;
         this.paymentRowMapper = paymentRowMapper;
         this.resourceReader = resourceReader;
+        this.keyHolder = keyHolder;
     }
 
     @Override
@@ -56,11 +59,11 @@ public class JdbcPaymentRepository implements PaymentRepository {
 
     @Override
     public Optional<PaymentEntity> savePayment(PaymentEntity paymentEntity) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+//        KeyHolder keyHolder = new GeneratedKeyHolder();
         final String savePaymentSql = resourceReader.readFileToString(SAVE_PAYMENT_IN_DB_SQL_QUERY_PATH);
         try {
             jdbcTemplate.update(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement(savePaymentSql, new String[]{"ID"});
+                PreparedStatement preparedStatement = connection.prepareStatement(savePaymentSql, new String[]{"id"});
                 preparedStatement.setLong(1, paymentEntity.getPaymentId());
                 preparedStatement.setBigDecimal(2, paymentEntity.getPaymentAmount());
                 return preparedStatement;

@@ -54,7 +54,7 @@ task genJaxb {
             mkdir(dir: classesDir)
 
             xjc(destdir: sourcesDir, schema: schema,
-                    package: "com.epam.amorozov.studycenter.wsdl") {
+                    package: "com.epam.amorozov.studycenter.soap.model") {
                 arg(value: "-wsdl")
                 produces(dir: sourcesDir, includes: "**/*.java")
             }

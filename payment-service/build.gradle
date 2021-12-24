@@ -11,10 +11,6 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-
     jaxb
 }
 
@@ -39,6 +35,37 @@ dockerRun {
     clean true
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            srcDir 'build/generated-sources/jaxb'
+        }
+    }
+}
+
+task jaxb {
+    ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
+    ext.schema = "src/main/resources/xsd/payment.xsd"
+
+    outputs.dir sourcesDir
+
+    doLast() {
+        project.ant {
+            taskdef name: "xjc", classname: "com.sun.tools.xjc.XJCTask",
+                    classpath: configurations.jaxb.asPath
+            mkdir(dir: sourcesDir)
+
+            xjc(destdir: sourcesDir, schema: schema) {
+                arg(value: "-wsdl")
+                produces(dir: sourcesDir, includes: "**/*.java")
+            }
+        }
+    }
+}
+
+compileJava.dependsOn jaxb
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -54,13 +81,11 @@ dependencies {
 //    runtimeOnly group: 'com.h2database', name: 'h2', version: '2.0.202'
     runtimeOnly group: 'org.postgresql', name: 'postgresql', version: '42.3.1'
 
-    jaxb(
-            'com.sun.xml.bind:jaxb-xjc:2.3.1',
-            'com.sun.xml.bind:jaxb-impl:2.3.1',
-            'org.glassfish.jaxb:jaxb-runtime:2.3.3'
-    )
+    implementation 'wsdl4j:wsdl4j'
+    implementation 'javax.xml.bind:jaxb-api'
+    implementation 'org.glassfish.jaxb:jaxb-runtime'
 
-    implementation group: 'wsdl4j', name: 'wsdl4j', version: '1.6.3'
+    jaxb("org.glassfish.jaxb:jaxb-xjc")
 
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
 }
@@ -80,24 +105,3 @@ bootJar{
     mainClass = 'com.epam.amorozov.paymentservice.PaymentServiceApplication'
     archiveName "${fileName}.jar"
 }
-
-task jaxb {
-    System.setProperty('javax.xml.accessExternalSchema', 'all')
-    def jaxbTargetDir = file("src/main/java")
-    doLast {
-        jaxbTargetDir.mkdirs()
-        ant.taskdef(
-                name: 'xjc',
-                classname: 'com.sun.tools.xjc.XJCTask',
-                classpath: configurations.jaxb.asPath
-        )
-        ant.jaxbTargetDir = jaxbTargetDir
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'com.epam.amorozov.paymentservice.soaps.payments',
-                schema: 'src/main/resources/xsd/payment.xsd'
-        )
-    }
-}
-
-//jaxb.enabled = false

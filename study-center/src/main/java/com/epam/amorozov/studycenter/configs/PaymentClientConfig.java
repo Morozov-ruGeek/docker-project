@@ -9,20 +9,20 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 @Configuration
 public class PaymentClientConfig {
 
-    @Value("${soap-url}")
-    String url;
+    @Value("${soap.payment-url}")
+    String paymentUrl;
 
     @Bean
     public Jaxb2Marshaller marshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        marshaller.setContextPath("com.epam.amorozov.studycenter.wsdl");
+        marshaller.setContextPath("com.epam.amorozov.studycenter.soap.model");
         return marshaller;
     }
 
     @Bean
     public PaymentClient paymentClient(Jaxb2Marshaller marshaller) {
         PaymentClient paymentClient = new PaymentClient();
-        paymentClient.setDefaultUri(url);
+        paymentClient.setDefaultUri(paymentUrl);
         paymentClient.setMarshaller(marshaller);
         paymentClient.setUnmarshaller(marshaller);
         return paymentClient;

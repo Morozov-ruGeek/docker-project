@@ -5,8 +5,11 @@ jwt:
   secret: SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
   lifetime: 1200000
 
-soap-url: ${SOAP_URL}
+soap:
+  payment-url: ${SOAP_URL} #http://localhost:8189/ws
 
 spring:
+  application:
+    name: study-center
   config:
-    import: optional:configserver:spring-cloud-config:8888
+    import: optional:configserver:http://spring-cloud-config:8888

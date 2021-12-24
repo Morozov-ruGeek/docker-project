@@ -2,12 +2,12 @@ package com.epam.amorozov.studycenter.repositories.jdbcimpl;
 
 import com.epam.amorozov.studycenter.models.entities.Student;
 import com.epam.amorozov.studycenter.repositories.StudentRepository;
-import com.epam.amorozov.studycenter.utils.IdKeyHolder;
 import com.epam.amorozov.studycenter.utils.ResourceReader;
 import com.epam.amorozov.studycenter.utils.extractors.StudentsExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +31,14 @@ public class JdbcStudentRepository implements StudentRepository {
     private static final String ADD_STUDENT_ON_COURSE_SQL_QUERY_PATH = "classpath:queries/student/add_student_on_course.sql";
 
     private final JdbcTemplate jdbcTemplate;
-    private final IdKeyHolder idKeyHolder;
+    private final GeneratedKeyHolder keyHolder;
     private final ResourceReader resourceReader;
     private final StudentsExtractor studentsExtractor;
 
     @Autowired
-    public JdbcStudentRepository(JdbcTemplate jdbcTemplate, IdKeyHolder idKeyHolder, ResourceReader resourceReader, StudentsExtractor studentsExtractor) {
+    public JdbcStudentRepository(JdbcTemplate jdbcTemplate, GeneratedKeyHolder keyHolder, ResourceReader resourceReader, StudentsExtractor studentsExtractor) {
         this.jdbcTemplate = jdbcTemplate;
-        this.idKeyHolder = idKeyHolder;
+        this.keyHolder = keyHolder;
         this.resourceReader = resourceReader;
         this.studentsExtractor = studentsExtractor;
     }
@@ -54,13 +54,13 @@ public class JdbcStudentRepository implements StudentRepository {
     public boolean saveStudent(Student student, List<Long> courseIds) {
         String saveStudentsSql = resourceReader.readFileToString(SAVE_NEW_STUDENT_SQL_QUERY_PATH);
         boolean checkOne = jdbcTemplate.update(connection -> {
-            PreparedStatement preparedStatement = connection.prepareStatement(saveStudentsSql, new String[]{"ID"});
+            PreparedStatement preparedStatement = connection.prepareStatement(saveStudentsSql, new String[]{"id"});
             preparedStatement.setString(1, student.getFirstName());
             preparedStatement.setString(2, student.getLastName());
             preparedStatement.setDate(3, Date.valueOf(student.getStartDate()));
             return preparedStatement;
-        }, idKeyHolder) == 1;
-        long newUserId = Objects.requireNonNull(idKeyHolder.getKey()).longValue();
+        }, keyHolder) == 1;
+        long newUserId = Objects.requireNonNull(keyHolder.getKey()).longValue();
         student.setId(newUserId);
 
         if (courseIds.size() != 0) {

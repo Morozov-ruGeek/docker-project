@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 @ConditionalOnClass(DataSource.class)
 public class JdbcScoreRepository implements ScoreRepository {
 
-    private final static String UPDATE_STUDENT_SCORE_BY_IDS_QUERY_PATH = "classpath:queries/score/update_student_score.sql";
+    private static final String UPDATE_STUDENT_SCORE_BY_IDS_QUERY_PATH = "classpath:queries/score/update_student_score.sql";
 
     private final JdbcTemplate jdbcTemplate;
     private final ResourceReader resourceReader;
