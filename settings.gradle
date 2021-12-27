@@ -2,3 +2,5 @@ rootProject.name = 'docker-project'
 include 'study-center'
 include 'payment-service'
 include 'spring-cloud-config-server'
+include 'spring-cloud-starter-netflix-eureka-server'
+

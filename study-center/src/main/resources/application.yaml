@@ -1,15 +1,17 @@
 server:
   port: 8190
 
-jwt:
-  secret: SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-  lifetime: 1200000
-
 soap:
-  payment-url: ${SOAP_URL} #http://localhost:8189/ws
+  payment-url: ${SOAP_URL} #http://localhost:8189/ws with eureka =
 
 spring:
   application:
     name: study-center
+#  profiles:
+#    active: study-center
   config:
-    import: optional:configserver:http://spring-cloud-config:8888
+    import: optional:configserver:${CONFIG_URL:http://localhost:8888}
+
+eureka:
+  client:
+    serviceUrl.defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}

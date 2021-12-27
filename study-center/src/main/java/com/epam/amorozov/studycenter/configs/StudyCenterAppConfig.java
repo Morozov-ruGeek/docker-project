@@ -4,8 +4,10 @@ import com.epam.amorozov.studycenter.models.entities.Course;
 import com.epam.amorozov.studycenter.models.entities.Student;
 import com.epam.amorozov.studycenter.models.entities.Topic;
 import org.modelmapper.ModelMapper;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +16,17 @@ import java.util.List;
 
 @Configuration
 public class StudyCenterAppConfig {
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
 
 //    @Bean
     public Student demoStudent() {
@@ -31,10 +44,5 @@ public class StudyCenterAppConfig {
         student.setCourses(courses);
         student.setStartDate(LocalDate.parse("2021-09-03"));
         return student;
-    }
-
-    @Bean
-    public ModelMapper modelMapper(){
-        return new ModelMapper();
     }
 }

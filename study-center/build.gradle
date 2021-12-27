@@ -86,7 +86,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage'
     }
-//    runtimeOnly group: 'com.h2database', name: 'h2', version: '1.4.200'
+
     runtimeOnly group: 'org.postgresql', name: 'postgresql', version: '42.3.1'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
@@ -103,6 +103,8 @@ dependencies {
     implementation 'org.springframework.ws:spring-ws-core'
 
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     implementation 'org.glassfish.jaxb:jaxb-runtime'
     implementation(files(genJaxb.classesDir).builtBy(genJaxb))

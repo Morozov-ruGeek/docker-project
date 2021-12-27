@@ -78,7 +78,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
-//    runtimeOnly group: 'com.h2database', name: 'h2', version: '2.0.202'
     runtimeOnly group: 'org.postgresql', name: 'postgresql', version: '42.3.1'
 
     implementation 'wsdl4j:wsdl4j'
@@ -88,6 +87,8 @@ dependencies {
     jaxb("org.glassfish.jaxb:jaxb-xjc")
 
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 dependencyManagement {

@@ -1,44 +1,85 @@
-version: '3.9'
+version: '2.4'
 
 services:
 
   spring-cloud-config:
     build: spring-cloud-config-server/
     container_name: cloud-config
-    expose:
-      - "8888"
+    ports:
+      - "8888:8888"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: always
+
+  discovery-service:
+    build: spring-cloud-starter-netflix-eureka-server/
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: always
 
   payment-service:
     build: payment-service/
     container_name: payment-service
     expose:
       - "8189"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://payment-service:8189/actuator/health" ]
+      interval: 25s
+      timeout: 5s
+      retries: 4
     depends_on:
-      - spring-cloud-config
-      - payment-db
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      payment-db:
+        condition: service_started
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=payment-db
       - POSTGRES_URL=payment-db:5432/payment-db
-    tty: true
+      - CONFIG_URL=http://spring-cloud-config:8888
+      - EUREKA_URI=http://eureka-server:8761/eureka/
+    restart: always
 
   study-center:
     build: study-center/
-    container_name: study_center
+    container_name: study-center
     ports:
       - "8190:8190"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://study_center:8190/actuator/health" ]
+      interval: 25s
+      timeout: 5s
+      retries: 4
     depends_on:
-      - spring-cloud-config
-      - study-db
-      - payment-service
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      payment-service:
+        condition: service_healthy
+      study-db:
+        condition: service_started
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=study-db
       - POSTGRES_URL=study-db:5432/study-db
       - SOAP_URL=http://payment-service:8189/ws
-    tty: true
+      - CONFIG_URL=http://spring-cloud-config:8888
+      - EUREKA_URI=http://eureka-server:8761/eureka/
+    restart: always
 
   payment-db:
     image: postgres:14.1-alpine
@@ -51,8 +92,6 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=payment-db
-    tty: true
-
 
   study-db:
     image: postgres:14.1-alpine
@@ -65,4 +104,3 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=study-db
-    tty: true
