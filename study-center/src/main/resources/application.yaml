@@ -2,7 +2,7 @@ server:
   port: 8190
 
 soap:
-  payment-url: ${SOAP_URL} #http://localhost:8189/ws with eureka =
+  payment-url: ${SOAP_URL} #http://localhost:8189/api/v1/soap
 
 spring:
   application:
@@ -11,7 +11,3 @@ spring:
 #    active: study-center
   config:
     import: optional:configserver:${CONFIG_URL:http://localhost:8888}
-
-eureka:
-  client:
-    serviceUrl.defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}

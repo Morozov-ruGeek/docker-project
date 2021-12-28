@@ -1,10 +1,10 @@
 server:
-  port: 8189
+  port: 5555
+  servlet:
+    context-path: /cloud
 
 spring:
   application:
-    name: payment-service
-#  profiles:
-#    active: payment-service
+    name: gateway-service
   config:
     import: optional:configserver:${CONFIG_URL:http://localhost:8888}

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/payment")
+@RequestMapping("api/v1/payments")
 public class PaymentController {
 
     private final PaymentEntityService paymentEntityService;

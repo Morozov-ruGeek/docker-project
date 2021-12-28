@@ -15,7 +15,7 @@ services:
     restart: always
 
   discovery-service:
-    build: spring-cloud-starter-netflix-eureka-server/
+    build: discovery-service/
     container_name: eureka-server
     ports:
       - "8761:8761"
@@ -26,11 +26,37 @@ services:
       retries: 3
     restart: always
 
+#todo add zuul in compose
+  gateway-service:
+    build: gateway-service/
+    container_name: gateway-service
+    ports:
+      - "5555:5555"
+    healthcheck:
+      test:  [ "CMD", "curl", "-f", "http://localhost:5555/actuator/health" ]
+      interval: 25s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      cloud-config:
+        condition: service_healthy
+      study-center:
+        condition: service_healthy
+      payment-service:
+        condition: service_healthy
+    environment:
+      - CONFIG_URL=http://spring-cloud-config:8888
+      - EUREKA_URI=http://eureka-server:8761/eureka/
+      - STUDY_CENTER_NAME=study-center
+      - PAYMENT_SERVICE_NAME=payment-service
+    restart: always
+
+
   payment-service:
     build: payment-service/
     container_name: payment-service
-    expose:
-      - "8189"
+    ports:
+      - "8189:8189"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://payment-service:8189/actuator/health" ]
       interval: 25s
@@ -76,7 +102,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=study-db
       - POSTGRES_URL=study-db:5432/study-db
-      - SOAP_URL=http://payment-service:8189/ws
+      - SOAP_URL=http://payment-service:8189/api/v1/soap
       - CONFIG_URL=http://spring-cloud-config:8888
       - EUREKA_URI=http://eureka-server:8761/eureka/
     restart: always
