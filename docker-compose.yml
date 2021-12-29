@@ -49,6 +49,7 @@ services:
       - EUREKA_URI=http://eureka-server:8761/eureka/
       - STUDY_CENTER_NAME=study-center
       - PAYMENT_SERVICE_NAME=payment-service
+      - GATEWAY_URL=http://localhost:5555
     restart: always
 
 
@@ -76,7 +77,7 @@ services:
       - POSTGRES_URL=payment-db:5432/payment-db
       - CONFIG_URL=http://spring-cloud-config:8888
       - EUREKA_URI=http://eureka-server:8761/eureka/
-    restart: always
+    restart: on-failure
 
   study-center:
     build: study-center/
@@ -105,7 +106,7 @@ services:
       - SOAP_URL=http://payment-service:8189/api/v1/soap
       - CONFIG_URL=http://spring-cloud-config:8888
       - EUREKA_URI=http://eureka-server:8761/eureka/
-    restart: always
+    restart: on-failure
 
   payment-db:
     image: postgres:14.1-alpine

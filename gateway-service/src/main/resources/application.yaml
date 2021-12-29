@@ -1,10 +1,42 @@
 server:
   port: 5555
-  servlet:
-    context-path: /cloud
 
 spring:
   application:
     name: gateway-service
   config:
     import: optional:configserver:${CONFIG_URL:http://localhost:8888}
+
+#    cloud:
+#      gateway:
+#        globalcors:
+#          corsConfigurations:
+#            '[/**]':
+#              allowedOrigins:
+#                - "${GATEWAY_URL}"
+#              allowedHeaders:
+#                - Content-Type
+#                - Authorization
+#        routes:
+#          - id: ${STUDY_CENTER_NAME}
+#            uri: lb://${STUDY_CENTER_NAME}
+#            predicates:
+#              - Path=/api/**
+#            filters:
+#              - StripPrefix=1
+#          - id: ${PAYMENT_SERVICE_NAME}
+#            uri: lb://${PAYMENT_SERVICE_NAME}
+#            predicates:
+#              - Path=/payment/**
+#            filters:
+#              - StripPrefix=1
+
+stury-center:
+  name: ${STUDY_CENTER_NAME}
+  path: ${STUDY_CENTER_NAME}/api/**
+  uri: lb://${STUDY_CENTER_NAME}
+
+payment-service:
+  name: ${PAYMENT_SERVICE_NAME}
+  path: ${PAYMENT_SERVICE_NAME}/api/**
+  uri: lb://${PAYMENT_SERVICE_NAME}
