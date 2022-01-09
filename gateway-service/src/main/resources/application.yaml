@@ -4,9 +4,19 @@ server:
 spring:
   application:
     name: gateway-service
+    loadbalancer:
+      ribbon:
+        enabled: false
   config:
     import: optional:configserver:${CONFIG_URL:http://localhost:8888}
 
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        web:
+#          client:
+#            RestTemplate: DEBUG
 #    cloud:
 #      gateway:
 #        globalcors:

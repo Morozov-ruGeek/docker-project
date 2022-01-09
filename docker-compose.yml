@@ -26,7 +26,6 @@ services:
       retries: 3
     restart: always
 
-#todo add zuul in compose
   gateway-service:
     build: gateway-service/
     container_name: gateway-service
