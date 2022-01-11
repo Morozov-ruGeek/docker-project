@@ -30,9 +30,9 @@ services:
     build: gateway-service/
     container_name: gateway-service
     ports:
-      - "5555:5555"
+      - "8080:8080"
     healthcheck:
-      test:  [ "CMD", "curl", "-f", "http://localhost:5555/actuator/health" ]
+      test:  [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 25s
       timeout: 5s
       retries: 3
@@ -44,19 +44,16 @@ services:
       payment-service:
         condition: service_healthy
     environment:
-      - CONFIG_URL=http://spring-cloud-config:8888
-      - EUREKA_URI=http://eureka-server:8761/eureka/
-      - STUDY_CENTER_NAME=study-center
-      - PAYMENT_SERVICE_NAME=payment-service
-      - GATEWAY_URL=http://localhost:5555
+      SERVER_PORT: 8080
+      CONFIG_URL: http://spring-cloud-config:8888
+      EUREKA_URI: http://eureka-server:8761/eureka/
     restart: always
-
 
   payment-service:
     build: payment-service/
     container_name: payment-service
-    ports:
-      - "8189:8189"
+#    ports:
+#      - "8189:8189"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://payment-service:8189/actuator/health" ]
       interval: 25s
@@ -70,21 +67,19 @@ services:
       payment-db:
         condition: service_started
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=payment-db
-      - POSTGRES_URL=payment-db:5432/payment-db
-      - CONFIG_URL=http://spring-cloud-config:8888
-      - EUREKA_URI=http://eureka-server:8761/eureka/
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      CONFIG_URL: http://spring-cloud-config:8888
+      EUREKA_URI: http://eureka-server:8761/eureka/
     restart: on-failure
 
   study-center:
     build: study-center/
     container_name: study-center
     ports:
-      - "8190:8190"
+      - "80:80"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://study_center:8190/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://study_center:8080/actuator/health" ]
       interval: 25s
       timeout: 5s
       retries: 4
@@ -98,13 +93,11 @@ services:
       study-db:
         condition: service_started
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=study-db
-      - POSTGRES_URL=study-db:5432/study-db
-      - SOAP_URL=http://payment-service:8189/api/v1/soap
-      - CONFIG_URL=http://spring-cloud-config:8888
-      - EUREKA_URI=http://eureka-server:8761/eureka/
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      SOAP_URL: http://payment-service:8189/api/v1/soap
+      CONFIG_URL: http://spring-cloud-config:8888
+      EUREKA_URI: http://eureka-server:8761/eureka/
     restart: on-failure
 
   payment-db:
@@ -115,9 +108,9 @@ services:
     volumes:
       - ./.docker/database/init/payment:/docker-entrypoint-initdb.d/
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=payment-db
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: payment-db
 
   study-db:
     image: postgres:14.1-alpine
@@ -127,6 +120,6 @@ services:
     volumes:
       - ./.docker/database/init/study:/docker-entrypoint-initdb.d/
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=study-db
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: study-db
