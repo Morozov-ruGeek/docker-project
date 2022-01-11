@@ -7,6 +7,8 @@ import com.epam.amorozov.studycenter.repositories.PaymentEntityRepository;
 import com.epam.amorozov.studycenter.services.CourseService;
 import com.epam.amorozov.studycenter.services.PaymentEntityService;
 import com.epam.amorozov.studycenter.soap.client.PaymentClient;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class PaymentEntityServiceImpl implements PaymentEntityService {
+
+    private static final String STUDY_SERVICE = "studyService";
     private final PaymentEntityRepository paymentEntityRepository;
     private final CourseService courseService;
     private final PaymentClient paymentClient;
@@ -30,6 +34,8 @@ public class PaymentEntityServiceImpl implements PaymentEntityService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public PaymentEntity payForTheCourse(Long studentId, Long courseId) {
         PaymentEntity paymentEntity = paymentEntityRepository.findByStudentAndCourseIds(studentId, courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found paymentEntity with student id = " + studentId + ", course id = " + courseId));
@@ -44,6 +50,8 @@ public class PaymentEntityServiceImpl implements PaymentEntityService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public Optional<PaymentEntity> saveNewPayment(Long studentId, Long courseId) {
         PaymentEntity paymentEntity = new PaymentEntity();
         paymentEntity.setStudentId(studentId);
@@ -52,6 +60,8 @@ public class PaymentEntityServiceImpl implements PaymentEntityService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public List<CourseDTO> studentPaidCourses(Long id){
         return paymentEntityRepository.findStudentPayments(id).stream()
                 .filter(paymentEntity -> !paymentEntity.isPaid())
