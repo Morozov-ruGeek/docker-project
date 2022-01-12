@@ -45,6 +45,4 @@ public class StudyCenterAppConfig {
         student.setStartDate(LocalDate.parse("2021-09-03"));
         return student;
     }
-
-
 }

@@ -79,38 +79,32 @@ genJaxb.enabled = false
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.6.1'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage'
-    }
-    implementation ('org.springframework.boot:spring-boot-starter-web-services') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-    }
-
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
     implementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.6'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage'
+    }
 
     runtimeOnly group: 'org.postgresql', name: 'postgresql', version: '42.3.1'
 
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.5'
 
+    implementation ('org.springframework.boot:spring-boot-starter-web-services') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
     implementation 'org.springframework.ws:spring-ws-core'
 
-    compileOnly group: 'io.github.resilience4j', name: 'resilience4j-circuitbreaker', version: '1.7.0'
-    compileOnly group: 'io.github.resilience4j', name: 'resilience4j-retry', version: '1.7.0'
-    compileOnly group: 'io.github.resilience4j', name: 'resilience4j-spring-boot2', version: '1.7.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.6.1'
 
     implementation 'org.glassfish.jaxb:jaxb-runtime'
     implementation(files(genJaxb.classesDir).builtBy(genJaxb))

@@ -1,59 +1,16 @@
 server:
   port: 80
 
+soap:
+  payment-url: ${SOAP_URL} #http://localhost:8189/api/v1/soap
+
 spring:
   application:
     name: study-center
+#  profiles:
+#    active: study-center
   config:
     import: optional:configserver:${CONFIG_URL:http://localhost:8888}
-
-management:
-  health:
-    circuitbreakers:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-  endpoint:
-    health:
-      show-details: always
-
-resilience4j.circuitbreaker:
-  configs:
-    default:
-      registerHealthIndicator: true
-      slidingWindowSize: 10
-      minimumNumberOfCalls: 5
-      permittedNumberOfCallsInHalfOpenState: 3
-      automaticTransitionFromOpenToHalfOpenEnabled: true
-      waitDurationInOpenState: 5s
-      failureRateThreshold: 50
-      eventConsumerBufferSize: 10
-      recordExceptions:
-        - org.springframework.web.client.HttpServerErrorException
-        - java.util.concurrent.TimeoutException
-        - java.io.IOException
-        - com.epam.amorozov.studycenter.exceptions.ResourceNotFoundException
-        - com.epam.amorozov.studycenter.exceptions.StudyCenterError
-  instances:
-    studyService:
-      baseConfig: default
-
-resilience4j.retry:
-  configs:
-    default:
-      maxRetryAttempts: 3
-      waitDuration: 100
-      retryExceptions:
-        - org.springframework.web.client.HttpServerErrorException
-        - java.util.concurrent.TimeoutException
-        - java.io.IOException
-        - com.epam.amorozov.studycenter.exceptions.ResourceNotFoundException
-        - com.epam.amorozov.studycenter.exceptions.StudyCenterError
-  instances:
-    studyService:
-      baseConfig: default
 
 logging:
   level:
@@ -62,6 +19,3 @@ logging:
         web:
           client:
             RestTemplate: DEBUG
-
-soap:
-  payment-url: ${SOAP_URL} #http://localhost:8189/api/v1/soap
