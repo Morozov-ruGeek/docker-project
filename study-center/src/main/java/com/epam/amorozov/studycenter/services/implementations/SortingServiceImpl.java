@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class SortingServiceImpl implements SortingService {
 
+    private static final String STUDY_SERVICE = "studyService";
     private final StudentService studentService;
 
     @Autowired
@@ -24,6 +25,8 @@ public class SortingServiceImpl implements SortingService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public List<StudentDTO> sortByDaysToEnd() {
         return studentService.getAllStudents().stream()
                 .sorted(Collections.reverseOrder((s1, s2) -> (int) (studentService.daysRemain(s1) - studentService.daysRemain(s2))))
@@ -40,6 +43,8 @@ public class SortingServiceImpl implements SortingService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public List<StudentDTO> sortByAVGScore() {
         return studentService.getAllStudents().stream()
                 .sorted(Collections.reverseOrder(Comparator.comparingDouble(studentService::getAVGScore)))
@@ -56,6 +61,8 @@ public class SortingServiceImpl implements SortingService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public List<StudentDTO> sortByChanceNotBeDeducted() {
         final int maximumScore = 100;
         return studentService.getAllStudents().stream()

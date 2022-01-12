@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CourseServiceImpl implements CourseService {
 
+    private static final String STUDY_SERVICE = "studyService";
     private final CourseRepository courseRepository;
     private final TopicService topicService;
 
@@ -32,6 +33,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public CourseDTO getCourseById(Long courseId) {
         Course course = courseRepository.findCourseById(courseId);
         return CourseDTO.builder()
@@ -43,6 +46,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public double getCourseDurationInDays(Course course) {
         final double workingHours = 8.0;
         int courseDurationInHours;
@@ -52,6 +57,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public boolean addNewCourse(NewCourseDTO newCourseDTO) {
         Course newCourse = new Course();
         newCourse.setName(newCourse.getName());
@@ -66,6 +73,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public List<CourseDTO> getAllCourses() {
         return courseRepository.getAllCourses().stream()
                 .map(course -> CourseDTO.builder()

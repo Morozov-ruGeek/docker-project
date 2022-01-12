@@ -13,6 +13,7 @@ import java.util.List;
 @Service
 public class TopicServiceImpl implements TopicService {
 
+    private static final String STUDY_SERVICE = "studyService";
     private final TopicRepository topicRepository;
 
     @Autowired
@@ -21,6 +22,8 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    @CircuitBreaker(name = STUDY_SERVICE)
+    @Retry(name = STUDY_SERVICE)
     public List<Long> saveTopicsInDb(List<Topic> topics) {
         return topicRepository.saveTopicsInDB(topics);
     }

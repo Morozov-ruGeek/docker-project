@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PaymentEntityService {
-    String payForTheCourse(Long studentId, Long courseId);
+    PaymentEntity payForTheCourse(Long studentId, Long courseId);
     Optional<PaymentEntity> saveNewPayment(Long studentId, Long courseId);
     List<CourseDTO> studentPaidCourses(Long id);
 }
