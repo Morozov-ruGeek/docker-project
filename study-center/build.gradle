@@ -104,7 +104,15 @@ dependencies {
 
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.6.1'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+
+    /**
+     resilience4j
+     */
+    implementation group: 'io.github.resilience4j', name: 'resilience4j-spring-boot2', version: '1.7.0'
+    implementation group: 'io.github.resilience4j', name: 'resilience4j-circuitbreaker', version: '1.7.0'
+    implementation group: 'io.github.resilience4j', name: 'resilience4j-retry', version: '1.7.0'
 
     implementation 'org.glassfish.jaxb:jaxb-runtime'
     implementation(files(genJaxb.classesDir).builtBy(genJaxb))
