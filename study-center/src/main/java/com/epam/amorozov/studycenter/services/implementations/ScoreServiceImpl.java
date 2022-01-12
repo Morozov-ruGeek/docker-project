@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ScoreServiceImpl implements ScoreService {
 
-    private static final String STUDY_SERVICE = "studyService";
     private final ScoreRepository scoreRepository;
 
     @Autowired
@@ -19,8 +18,6 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public boolean updateScoreById(Long studentId, Long topicId, int newStudentScore) {
         return scoreRepository.updateScoreById(studentId, topicId, newStudentScore);
     }

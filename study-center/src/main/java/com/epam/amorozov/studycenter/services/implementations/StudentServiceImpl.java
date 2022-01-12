@@ -26,7 +26,6 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @Slf4j
 public class StudentServiceImpl implements StudentService {
 
-    private static final String STUDY_SERVICE = "studyService";
     private final int maximumScore = 100;
 
     private final StudentRepository studentRepository;
@@ -46,8 +45,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public boolean addStudent(NewStudentDTO newStudentDTO) {
         Student student = new Student();
         student.setFirstName(newStudentDTO.getFirstName());
@@ -61,15 +58,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public boolean removeStudentFromCourse(Long studentId, Long courseId) {
         return studentRepository.removeStudentsFromCourse(studentId, courseId);
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public boolean rate(Long studentId, int newScore, Long topicId) {
         int minimumScore = 0;
         if (newScore <= minimumScore || newScore > maximumScore) {
@@ -81,8 +74,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public Double daysRemain(Student student) {
         final int workingHours = 8;
         double courseDuration = student.getCourses().stream()
@@ -96,8 +87,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public String possibleDeduct(Long studentId) {
         Student student = studentRepository.findStudentById(studentId);
         double possibleAvgMark = (getAVGScore(student) + maximumScore) / 2;
@@ -106,8 +95,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public Double getAVGScore(Student student) {
         double studentAvgScore = student.getScores().stream()
                 .mapToDouble(score -> score.getScore().doubleValue())
@@ -117,30 +104,22 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public List<Student> getAllStudents() {
         return studentRepository.getAllStudents();
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public Student findStudentById(Long studentId) {
         return studentRepository.findStudentById(studentId);
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public boolean addStudentOnCourse(long studentId, long courseId) {
         paymentEntityService.saveNewPayment(studentId, courseId);
         return studentRepository.addStudentInCourse(studentId, courseId);
     }
 
     @Override
-    @CircuitBreaker(name = STUDY_SERVICE)
-    @Retry(name = STUDY_SERVICE)
     public boolean deleteStudentById(Long id) {
         return studentRepository.deleteStudentById(id);
     }

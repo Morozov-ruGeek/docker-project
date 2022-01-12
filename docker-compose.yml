@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
 
-  spring-cloud-config:
+  cloud-config:
     build: spring-cloud-config-server/
     container_name: cloud-config
     ports:
@@ -14,7 +14,7 @@ services:
       retries: 3
     restart: always
 
-  discovery-service:
+  eureka-server:
     build: discovery-service/
     container_name: eureka-server
     ports:
