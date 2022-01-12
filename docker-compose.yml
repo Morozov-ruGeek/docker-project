@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
 
-  spring-cloud-config:
+  cloud-config:
     build: spring-cloud-config-server/
     container_name: cloud-config
     ports:
@@ -16,7 +16,7 @@ services:
 
   discovery-service:
     build: discovery-service/
-    container_name: eureka-server
+    container_name: discovery-service
     ports:
       - "8761:8761"
     healthcheck:
@@ -40,20 +40,20 @@ services:
       cloud-config:
         condition: service_healthy
       study-center:
-        condition: service_healthy
+        condition: service_started
       payment-service:
         condition: service_healthy
     environment:
       SERVER_PORT: 8080
-      CONFIG_URL: http://spring-cloud-config:8888
-      EUREKA_URI: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://cloud-config:8888
+      EUREKA_URI: http://discovery-service:8761/eureka/
     restart: always
 
   payment-service:
     build: payment-service/
     container_name: payment-service
-#    ports:
-#      - "8189:8189"
+    ports:
+      - "8189:8189"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://payment-service:8189/actuator/health" ]
       interval: 25s
@@ -62,15 +62,15 @@ services:
     depends_on:
       cloud-config:
         condition: service_healthy
-      eureka-server:
+      discovery-service:
         condition: service_healthy
       payment-db:
         condition: service_started
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      CONFIG_URL: http://spring-cloud-config:8888
-      EUREKA_URI: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://cloud-config:8888
+      EUREKA_URI: http://discovery-service:8761/eureka/
     restart: on-failure
 
   study-center:
@@ -86,7 +86,7 @@ services:
     depends_on:
       cloud-config:
         condition: service_healthy
-      eureka-server:
+      discovery-service:
         condition: service_healthy
       payment-service:
         condition: service_healthy
@@ -96,8 +96,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       SOAP_URL: http://payment-service:8189/api/v1/soap
-      CONFIG_URL: http://spring-cloud-config:8888
-      EUREKA_URI: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://cloud-config:8888
+      EUREKA_URI: http://discovery-service:8761/eureka/
     restart: on-failure
 
   payment-db:
