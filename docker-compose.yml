@@ -13,6 +13,9 @@ services:
       timeout: 5s
       retries: 3
     restart: always
+    networks:
+      - m-net
+      - elk
 
   discovery-service:
     build: discovery-service/
@@ -25,21 +28,24 @@ services:
       timeout: 5s
       retries: 3
     restart: always
+    networks:
+      - m-net
+      - elk
 
   gateway-service:
     build: gateway-service/
     container_name: gateway-service
     ports:
-      - "8080:8080"
+      - "8090:8080"
     healthcheck:
-      test:  [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      test:  [ "CMD", "curl", "-f", "http://localhost:8090/actuator/health" ]
       interval: 25s
       timeout: 5s
       retries: 3
     depends_on:
       cloud-config:
         condition: service_healthy
-      study-center-1:
+      study-center:
         condition: service_started
       payment-service:
         condition: service_healthy
@@ -48,6 +54,9 @@ services:
       CONFIG_URL: http://cloud-config:8888
       EUREKA_URI: http://discovery-service:8761/eureka/
     restart: always
+    networks:
+      - m-net
+      - elk
 
   payment-service:
     build: payment-service/
@@ -72,8 +81,11 @@ services:
       CONFIG_URL: http://cloud-config:8888
       EUREKA_URI: http://discovery-service:8761/eureka/
     restart: on-failure
+    networks:
+      - m-net
+      - elk
 
-  study-center-1:
+  study-center:
     build: study-center/
     container_name: study-center
     ports:
@@ -98,61 +110,12 @@ services:
       SOAP_URL: http://payment-service:8189/api/v1/soap
       CONFIG_URL: http://cloud-config:8888
       EUREKA_URI: http://discovery-service:8761/eureka/
+      LOGSTASH_HOST: docker-elk-logstash-1
+      LOGSTASH_PORT: 5000
     restart: on-failure
-
-  study-center-2:
-    build: study-center/
-    container_name: study-center-2
-    ports:
-      - "81:80"
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://study_center:8080/actuator/health" ]
-      interval: 25s
-      timeout: 5s
-      retries: 4
-    depends_on:
-      cloud-config:
-        condition: service_healthy
-      discovery-service:
-        condition: service_healthy
-      payment-service:
-        condition: service_healthy
-      study-db:
-        condition: service_started
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      SOAP_URL: http://payment-service:8189/api/v1/soap
-      CONFIG_URL: http://cloud-config:8888
-      EUREKA_URI: http://discovery-service:8761/eureka/
-    restart: on-failure
-
-  study-center-3:
-    build: study-center/
-    container_name: study-center-3
-    ports:
-      - "82:80"
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://study_center:8080/actuator/health" ]
-      interval: 25s
-      timeout: 5s
-      retries: 4
-    depends_on:
-      cloud-config:
-        condition: service_healthy
-      discovery-service:
-        condition: service_healthy
-      payment-service:
-        condition: service_healthy
-      study-db:
-        condition: service_started
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      SOAP_URL: http://payment-service:8189/api/v1/soap
-      CONFIG_URL: http://cloud-config:8888
-      EUREKA_URI: http://discovery-service:8761/eureka/
-    restart: on-failure
+    networks:
+      - m-net
+      - elk
 
   payment-db:
     image: postgres:14.1-alpine
@@ -165,6 +128,9 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: payment-db
+    networks:
+      - m-net
+      - elk
 
   study-db:
     image: postgres:14.1-alpine
@@ -177,3 +143,14 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: study-db
+    networks:
+      - m-net
+      - elk
+
+networks:
+  elk:
+    external: true
+    name: docker-elk_elk
+  m-net:
+    driver: bridge
+    name: m-net

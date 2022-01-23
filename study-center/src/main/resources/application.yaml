@@ -62,3 +62,7 @@ logging:
         web:
           client:
             RestTemplate: DEBUG
+
+logstash:
+    host: ${LOGSTASH_HOST:localhost}
+    port: ${LOGSTASH_PORT:5000}
