@@ -89,6 +89,11 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.boot:spring-boot-starter-actuator:2.6.1'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.6'
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.0'
 }
 
 dependencyManagement {

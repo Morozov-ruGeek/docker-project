@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration scan="true">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <springProperty name="APPLICATION_NAME" source="spring.application.name"/>
+    <springProperty name="LOGSTASH_HOST" source="logstash.host"/>
+    <springProperty name="LOGSTASH_PORT" source="logstash.port"/>
+
     <appender name="STDOUT"
               class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -11,7 +17,7 @@
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>learning-center-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${APPLICATION_NAME:- }-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>10</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
@@ -24,8 +30,23 @@
         </encoder>
     </appender>
 
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <param name="Encoding" value="UTF-8"/>
+        <destination>${LOGSTASH_HOST:- }:${LOGSTASH_PORT:- }</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app_name":"${APPLICATION_NAME:- }"}</customFields>
+        </encoder>
+    </appender>
+
+    <logger name="${APPLICATION_NAME:- }" level="${LOGGER_LEVEL:-DEBUG}" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STASH" />
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
+        <appender-ref ref="STASH"/>
     </root>
 </configuration>
