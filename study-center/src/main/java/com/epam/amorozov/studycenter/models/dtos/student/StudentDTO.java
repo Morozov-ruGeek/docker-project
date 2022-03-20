@@ -2,6 +2,7 @@ package com.epam.amorozov.studycenter.models.dtos.student;
 
 import com.epam.amorozov.studycenter.models.entities.Course;
 import com.epam.amorozov.studycenter.models.entities.Score;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StudentDTO {
 
     private Long id;

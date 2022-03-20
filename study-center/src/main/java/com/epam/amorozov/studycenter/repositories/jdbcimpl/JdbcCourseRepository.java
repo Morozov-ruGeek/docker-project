@@ -5,25 +5,24 @@ import com.epam.amorozov.studycenter.repositories.CourseRepository;
 import com.epam.amorozov.studycenter.utils.ResourceReader;
 import com.epam.amorozov.studycenter.utils.extractors.CourseExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Repository
-@ConditionalOnClass(DataSource.class)
+@ConditionalOnBean(name = "JdbcTemplate")
 public class JdbcCourseRepository implements CourseRepository {
 
-    private final static String FIND_COURSE_BY_ID_SQL_QUERY_PATH = "classpath:queries/course/find_course_by_id.sql";
-    private final static String SAVE_NEW_COURSE_SQL_QUERY_PATH = "classpath:queries/course/save_new_course.sql";
-    private final static String LINK_COURSE_WITH_TOPIC_SQL_QUERY_PATH = "classpath:queries/course/link_course_with_topic.sql";
-    private final static String FIND_ALL_COURSES_QUERY_PATH = "classpath:queries/course/find_all_courses.sql";
+    private static final String FIND_COURSE_BY_ID_SQL_QUERY_PATH = "classpath:queries/course/find_course_by_id.sql";
+    private static final String SAVE_NEW_COURSE_SQL_QUERY_PATH = "classpath:queries/course/save_new_course.sql";
+    private static final String LINK_COURSE_WITH_TOPIC_SQL_QUERY_PATH = "classpath:queries/course/link_course_with_topic.sql";
+    private static final String FIND_ALL_COURSES_QUERY_PATH = "classpath:queries/course/find_all_courses.sql";
 
 
     private final JdbcTemplate jdbcTemplate;

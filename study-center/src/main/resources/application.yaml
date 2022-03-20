@@ -9,6 +9,11 @@ spring:
     name: study-center
   config:
     import: optional:configserver:${CONFIG_URL:http://localhost:8888}
+  jpa:
+    show-sql: true
+
+jpa-state:
+  state: ${JPA_STATE:off}
 
 management:
   health:
